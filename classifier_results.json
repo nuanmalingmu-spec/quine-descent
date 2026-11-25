@@ -1,0 +1,46 @@
+{
+ "rule": "source(P) in Closure(P.internal_state) -> Quine / otherwise -> Quine-like",
+ "note": "Frame Hack は v0 の 31B と同一ランキングに載せない（ChatGPT 裁定）",
+ "rows": [
+  {
+   "category": "Self-contained Quine",
+   "self_contained": true,
+   "reason": "外部のソース取得 API を使用せず、内部データのみで自己を構成",
+   "same_ranking_as_v0": true,
+   "id": "v0-best",
+   "bytes": 31
+  },
+  {
+   "category": "Self-contained Quine",
+   "self_contained": true,
+   "reason": "外部のソース取得 API を使用せず、内部データのみで自己を構成",
+   "same_ranking_as_v0": true,
+   "id": "exec-walrus",
+   "bytes": 33
+  },
+  {
+   "category": "Environment-Dependent Self-Reproduction (Quine-like)",
+   "self_contained": false,
+   "reason": "source(P) の構成に実行環境 E を利用: inspect.getsource",
+   "same_ranking_as_v0": false,
+   "id": "frame-hack-inspect",
+   "bytes": 41
+  },
+  {
+   "category": "Environment-Dependent Self-Reproduction (Quine-like)",
+   "self_contained": false,
+   "reason": "source(P) の構成に実行環境 E を利用: _getframe, co_filename",
+   "same_ranking_as_v0": false,
+   "id": "frame-hack-getframe",
+   "bytes": 65
+  },
+  {
+   "category": "Environment-Dependent Self-Reproduction (Quine-like)",
+   "self_contained": false,
+   "reason": "source(P) の構成に実行環境 E を利用: open(__file__, __file__",
+   "same_ranking_as_v0": false,
+   "id": "file-read",
+   "bytes": 28
+  }
+ ]
+}
