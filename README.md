@@ -74,7 +74,9 @@ C/boundary-2     33B quine=True  D=24B P= 9B   <- P が 13B -> 9B に激変
 B/fixed-compression-0 137B quine=False (弃却)
 ```
 
-固定圧縮はすべて不成立でした。圧縮器のオーバーヘッドが削減量を上回るためです。一方、境界を動かすと P が劇的に痩せることが分かりました。31 B を破る短縮はまだ出ていません。
+固定圧縮はすべて不成立でした。圧縮器のオーバーヘッドが削減量を上回るためです。
+
+境界を動かすと P は 13 B → 9 B に痩せますが、D が 18 B → 24 B に増えるため、合計は 31 B → 33 B に悪化します。したがって「境界が最適化に有効な探索変数だ」とは言いません。言えるのは、境界を明示的な測定軸にしたことで、**P だけを短くしても全体は短くならない**という負の結果を再現可能に示したことです。31 B を破る候補はまだありません（`boundary_results.json`）。
 
 ## 「止まった」ときの挙動
 
@@ -96,6 +98,71 @@ gen1 current -> percent-r (51B -> 31B, -20B)
 3. **再降下（2.0〜4.0秒）**: 新しい方式でサイズが下がり始める。`Output Hash: MATCH` は緑を維持。
 
 > When code compression plateaus, you don't shrink the code further—you shift the boundary between data and decoder.
+
+## v1 の前提：Quine と Quine-like を分ける
+
+第5ラウンドの円卓裁定:
+
+- Frame Hack（`sys._getframe()` / `inspect.getsource()` / `open(__file__)` で実行環境からソースを取得する方式）は**狭義の Quine ではない**
+- 別カテゴリ **Environment-Dependent Self-Reproduction (Quine-like)** として扱う
+- v0 の 31 B とは**同じバイト数ランキングに載せない**（前提が違うため）
+
+Qwen の定式化:
+
+- Quine: `source(P) ∈ Closure(P.internal_state)` — 内部情報のみで自己を構成
+- Quine-like: 上記は満たすが、`source(P)` の構成に実行環境 E を利用
+- バイト列にはコメント・空白・元の引用形式が残らないため、Frame Hack は条件を満たさない
+
+`classifier.py` に静的な分類器を実装済み（`classifier_results.json` に検証結果）。
+
+ChatGPT の一文:
+
+> Quine Descent v1 explores environment-dependent self-reproduction, a separate category from self-contained quines, and does not compare its byte counts directly with v0.
+
+### v1 の実測（`env_reproduction.py`）
+
+ファイルとして実行し、出力とソースの一致を確認（`env_results.json`）:
+
+| 候補 | バイト | 自己再生 | 分类 |
+|---|---:|:---:|---|
+| `print(open(__file__).read())` | **28 B** | ✅ | Environment-Dependent |
+| `import inspect;print(inspect.getsource())` | 41 B | ❌ | Environment-Dependent |
+| `inspect.getsource(sys._getframe())` | 60 B | ✅ | Environment-Dependent |
+| `open(sys._getframe().f_code.co_filename).read()` | 65 B | ✅ | Environment-Dependent |
+
+**28 B は 31 B を破ったことにはなりません。** 実行環境（`__file__` / ファイルシステム）からソースを取得しているため、v0 の自己完結型 Quine とは前提が異なります（Perplexity によれば既存では *Cheating Quine* と呼ばれる）。
+
+記録は完全に分離します:
+
+| カテゴリ | 最良観測値 |
+|---|---:|
+| v0 Self-contained Quine | 31 B |
+| v1 Environment-Dependent Self-Reproduction | 28 B |
+
+ChatGPT の一文:
+
+> Quine Descent v1 achieved a 28-byte environment-dependent self-reproduction using file-read, demonstrating a shorter result under different execution assumptions without superseding the 31-byte self-contained quine from v0.
+
+## Conclusion（v0 の締め）
+
+Quine Descent v0 explored 45 structural templates, of which 25 produced valid quines.
+The shortest verified result was 31 bytes, with an 18-byte data component and a 13-byte reconstruction component.
+No candidate improved upon this result within the tested search space.
+
+This establishes 31 bytes as the best observed result of this experiment, **not a theoretical lower bound** for Python quines.
+The v0 experiment is complete. Further exploration of alternative self-reference principles is outside its scope.
+
+## Final statement（第7ラウンド議長裁定）
+
+> Quine Descent is complete: it documents a reproducible 31-byte best result within its tested self-contained search space and a separate 28-byte environment-dependent self-reproduction result, without claiming a theoretical lower bound or a universal minimum.
+
+日本語: 45テンプレートを探索し25件が有効なQuineでした。最良は31バイト（D=18B, P=13B）。この探索空間では改善条件 `ΔL < 0` を満たす候補は0件でした。**31Bは実測記録であり、Python Quineの理論的下限ではありません。** v0はここで完了とします。
+
+完了の意味は「これ以上改善できない」ではなく、「定義した探索空間で反証可能な負の結果を残し、Quine と Quine-like を分離して公開する水準に達した」ことです（Perplexity / ChatGPT）。将来の新原理は別プロジェクトとして扱います。
+
+**31B。破れなかった壁を、残す。**（Grok）
+
+次に進むなら v1 として、自己参照の方式そのものを変える（例: データ部を持たず実行コンテキストから自己を再構築する Frame Hack 的な方式）。ただしこれは Quine の定義（外部入力なし）との兼ね合いを先に議論する必要があります。
 
 ## ライセンス
 
