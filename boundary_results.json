@@ -1,0 +1,90 @@
+{
+ "note": "D=自己参照文字列, P=残りのコード。判定は |D|+|P| の合計バイト。大域最小性は主張しない。",
+ "best": "repr/s/plain",
+ "best_bytes": 31,
+ "accepted": 8,
+ "total": 9,
+ "rows": [
+  {
+   "id": "repr/s/plain",
+   "bytes": 31,
+   "d_bytes": 18,
+   "p_bytes": 13,
+   "quine": true,
+   "sha256": "2bf977a65f70",
+   "source": "s='s=%r;print(s%%s)';print(s%s)"
+  },
+  {
+   "id": "repr/s/paren",
+   "bytes": 35,
+   "d_bytes": 20,
+   "p_bytes": 15,
+   "quine": true,
+   "sha256": "134078b3150c",
+   "source": "s='s=%r;print((s%%s))';print((s%s))"
+  },
+  {
+   "id": "repr/a/plain",
+   "bytes": 31,
+   "d_bytes": 18,
+   "p_bytes": 13,
+   "quine": true,
+   "sha256": "bc7535bd8d64",
+   "source": "a='a=%r;print(a%%a)';print(a%a)"
+  },
+  {
+   "id": "repr/a/paren",
+   "bytes": 35,
+   "d_bytes": 20,
+   "p_bytes": 15,
+   "quine": true,
+   "sha256": "68bdea0dc60f",
+   "source": "a='a=%r;print((a%%a))';print((a%a))"
+  },
+  {
+   "id": "repr/_/plain",
+   "bytes": 31,
+   "d_bytes": 18,
+   "p_bytes": 13,
+   "quine": true,
+   "sha256": "a5d88c8f1959",
+   "source": "_='_=%r;print(_%%_)';print(_%_)"
+  },
+  {
+   "id": "repr/_/paren",
+   "bytes": 35,
+   "d_bytes": 20,
+   "p_bytes": 15,
+   "quine": true,
+   "sha256": "8dda6128690c",
+   "source": "_='_=%r;print((_%%_))';print((_%_))"
+  },
+  {
+   "id": "exec/walrus",
+   "bytes": 33,
+   "d_bytes": 24,
+   "p_bytes": 9,
+   "quine": true,
+   "sha256": "1fea8c0d07db",
+   "source": "exec(s:='print(\"exec(s:=%r)\"%s)')"
+  },
+  {
+   "id": "exec/simple",
+   "bytes": 35,
+   "d_bytes": 25,
+   "p_bytes": 10,
+   "quine": true,
+   "sha256": "362d76796c4e",
+   "source": "s='print(\"s=%r;exec(s)\"%s)';exec(s)"
+  },
+  {
+   "id": "data/zlib-b85",
+   "bytes": 110,
+   "d_bytes": 86,
+   "p_bytes": 24,
+   "quine": false,
+   "sha256": "34cddad17e31",
+   "source": "import zlib,base64;s='c-kwrRV}hED9X$$(I{3`E!G48E;$7;';print((s%s)%eval(compile('s=%r;print(s%%s)','','exec')))"
+  }
+ ]
+}
