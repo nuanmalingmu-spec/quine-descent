@@ -1,0 +1,41 @@
+{
+ "note": "環境依存型は v0 の 31B と別カテゴリ。同じランキングでは比較しない。",
+ "rows": [
+  {
+   "id": "file-read",
+   "bytes": 28,
+   "self_reproducing": true,
+   "category": "Environment-Dependent Self-Reproduction (Quine-like)",
+   "self_contained": false,
+   "reason": "source(P) の構成に実行環境 E を利用: open(__file__, __file__",
+   "source": "print(open(__file__).read())"
+  },
+  {
+   "id": "inspect",
+   "bytes": 41,
+   "self_reproducing": false,
+   "category": "Environment-Dependent Self-Reproduction (Quine-like)",
+   "self_contained": false,
+   "reason": "source(P) の構成に実行環境 E を利用: inspect.getsource",
+   "source": "import inspect;print(inspect.getsource())"
+  },
+  {
+   "id": "inspect-frame",
+   "bytes": 60,
+   "self_reproducing": true,
+   "category": "Environment-Dependent Self-Reproduction (Quine-like)",
+   "self_contained": false,
+   "reason": "source(P) の構成に実行環境 E を利用: inspect.getsource, _getframe",
+   "source": "import inspect,sys;print(inspect.getsource(sys._getframe()))"
+  },
+  {
+   "id": "frame-file",
+   "bytes": 65,
+   "self_reproducing": true,
+   "category": "Environment-Dependent Self-Reproduction (Quine-like)",
+   "self_contained": false,
+   "reason": "source(P) の構成に実行環境 E を利用: _getframe, co_filename",
+   "source": "import sys;print(open(sys._getframe().f_code.co_filename).read())"
+  }
+ ]
+}
