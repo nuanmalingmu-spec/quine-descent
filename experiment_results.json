@@ -1,1 +1,99 @@
-{"error": "not found"}
+{
+ "at": "2026-11-25T23:57:42",
+ "note": "判定は完成ソース全体のUTF-8バイト数。圧縮率ではない。大域最小性は主張しない。",
+ "best_accepted": "A/baseline",
+ "best_bytes": 31,
+ "results": [
+  {
+   "id": "A/baseline",
+   "source": "s='s=%r;print(s%%s)';print(s%s)",
+   "bytes": 31,
+   "quine_strict": true,
+   "sha256": "2bf977a65f705d70",
+   "runtime_ms": 35.92,
+   "stderr": "",
+   "accepted": true,
+   "group": "A",
+   "d_bytes": 18,
+   "p_bytes": 13
+  },
+  {
+   "id": "B/fixed-compression-0",
+   "source": "import zlib,base64;s='eJxLZGRIVNBQyc5IzStOzMzMS8wpTi0uSU1RsLZQyC8uSU1RzM5IL的习惯';exec(zlib.decompress(base64.b85decode(s)).decode())",
+   "bytes": 137,
+   "quine_strict": false,
+   "sha256": "48764be81fb66e2d",
+   "runtime_ms": 66.5,
+   "stderr": "Traceback (most recent call last):\n  File \"C:\\Users\\Owner\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\base64.py\", line 37, in _bytes_from_decode_data\n    return s.encode('ascii')\n           ^^^^^^^^^^",
+   "accepted": false,
+   "group": "B",
+   "d_bytes": 64,
+   "p_bytes": 73
+  },
+  {
+   "id": "B/fixed-compression-1",
+   "source": "import zlib,base64;s='';exec(zlib.decompress(base64.b85decode(s)).decode())",
+   "bytes": 75,
+   "quine_strict": false,
+   "sha256": "d4c6e5228d7a4d23",
+   "runtime_ms": 59.39,
+   "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\nzlib.error: Error -5 while decompressing data: incomplete or truncated stream\n",
+   "accepted": false,
+   "group": "B",
+   "d_bytes": 2,
+   "p_bytes": 73
+  },
+  {
+   "id": "C/boundary-0",
+   "source": "s='s=%r;print(s%%s)';print(s%s)",
+   "bytes": 31,
+   "quine_strict": true,
+   "sha256": "2bf977a65f705d70",
+   "runtime_ms": 37.06,
+   "stderr": "",
+   "accepted": true,
+   "group": "C",
+   "d_bytes": 18,
+   "p_bytes": 13
+  },
+  {
+   "id": "C/boundary-1",
+   "source": "s='s=%r;print((s%%s))';print((s%s))",
+   "bytes": 35,
+   "quine_strict": true,
+   "sha256": "134078b3150c6c6c",
+   "runtime_ms": 35.61,
+   "stderr": "",
+   "accepted": true,
+   "group": "C",
+   "d_bytes": 20,
+   "p_bytes": 15
+  },
+  {
+   "id": "C/boundary-2",
+   "source": "exec(s:='print(\"exec(s:=%r)\"%s)')",
+   "bytes": 33,
+   "quine_strict": true,
+   "sha256": "1fea8c0d07db8c84",
+   "runtime_ms": 37.26,
+   "stderr": "",
+   "accepted": true,
+   "group": "C",
+   "d_bytes": 24,
+   "p_bytes": 9
+  },
+  {
+   "id": "C/boundary-3",
+   "source": "s='print(\"s=%r;exec(s)\"%s)';exec(s)",
+   "bytes": 35,
+   "quine_strict": true,
+   "sha256": "362d76796c4e2f81",
+   "runtime_ms": 37.04,
+   "stderr": "",
+   "accepted": true,
+   "group": "C",
+   "d_bytes": 25,
+   "p_bytes": 10
+  }
+ ]
+}
